@@ -4,6 +4,11 @@ my $exec_path = `git --exec-path`;
 chomp $exec_path;
 my $man_path = `git --man-path`;
 chomp $man_path;
+unless ($man_path) {
+    # --man-dir not implemented; derive it from the exec path.
+    my $sep = substr $exec_path, 0, 1;
+    ($man_path = $exec_path) =~ s/\blibexec\b.+/share${sep}man${sep}man1/;
+}
 
 my $build = Module::Build->new(
     module_name        => 'git-build-rpm',
@@ -14,7 +19,7 @@ my $build = Module::Build->new(
     pm_files           => {},
     configure_requires => { 'Module::Build' => '0.35' },
     build_requires     => { 'Module::Build' => '0.35' },
-    install_path       => { script => $exec_path, bin_doc => $man_path },
+    install_path       => { script => $exec_path, bindoc => $man_path },
     requires           => {
         perl                => '5.010',
         Getopt::Long        => 0,
