@@ -28,5 +28,4 @@ my $build = Module::Build->new(
         Pod::Usage          => 0,
     },
 );
-use Data::Dump; ddx $build->install_path;
 $build->create_build_script;
