@@ -15,7 +15,7 @@ Requires:       perl(List::Util)
 Requires:       perl(IPC::System::Simple) >= 1.17
 Requires:       perl(File::Temp)
 Requires:       perl(Path::Class)
-Requires:       perl(File::path)
+Requires:       perl(File::Path)
 Requires:       perl(File::Copy)
 Requires:       perl(File::Basename)
 Requires:       perl(Pod::Usage)
