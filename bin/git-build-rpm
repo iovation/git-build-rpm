@@ -1,0 +1,120 @@
+#!/usr/bin/perl -w
+
+use strict;
+use warnings;
+use Getopt::Long;
+use List::Util qw(first);
+use IPC::System::Simple 1.17 qw(runx capturex $EXITVAL);
+use File::Temp;
+use Path::Class;
+use File::Path qw(make_path);
+use File::Copy qw(move copy);
+our $VERSION = '0.90';
+
+Getopt::Long::Configure (qw(bundling));
+my %opts = ( git => 'git' );
+Getopt::Long::GetOptions(
+    'git=s'                 => \$opts{git},
+    'spec-file|spec=s'      => \$opts{spec_file},
+    'dist|d=s'              => \$opts{dist},
+    'git-branch|branch|b=s' => \$opts{git_branch},
+    'rpm-dir|dir=s'         => \$opts{rpm_dir},
+    'help|H'                => \$opts{help},
+    'quiet!'                => \$opts{quiet},
+    'man|M'                 => \$opts{man},
+    'version|V'             => \$opts{version},
+) or pod2usage();
+
+# Handle documentation requests.
+_pod2usage(
+    ( $opts{man} ? ( '-sections' => '.+' ) : ()),
+    '-exitval' => 0,
+) if $opts{help} or $opts{man};
+
+# Handle version request.
+if ($opts{version}) {
+    require File::Basename;
+    print File::Basename::basename($0), ' ', __PACKAGE__->VERSION, $/;
+    exit;
+}
+
+# Figure out what branch we're on.
+my $git = $opts{git};
+my $git_head = $opts{git_branch} || do {
+    my ($line) = capturex $git, 'branch';
+    die "Cannot detect current git branch; use --git-branch\n"
+        unless $line =~ /^[*]\s(.+)$/;
+    $1;
+};
+
+# Get the name of the project.
+my $name = $opts{package_name} || do {
+    my @remotes = capturex $git, qw(remote -v);
+    my $origin = first { /^origin/ } @remotes;
+    $origin ||= $remotes[0];
+    die "Cannot detect project name; use --package-name\n"
+        unless $origin =~ m{([^/]+)[.]git\b};
+    $1;
+};
+
+my $dir = dir $opts{rpm_dir} || File::Temp::tempdir(CLEANUP => 1);
+my $spec_file = file $opts{spec_file} || ('dist', "$name.spec");
+
+die "$spec_file does not exist; use --spec-file\n" unless -e $spec_file;
+
+# Extract the name from the spec file.
+my $version = do {
+    my $fh = $spec_file->open('<:encoding(UTF-8)')
+        or die "Cannot open $spec_file: $!\n";
+    my $v;
+    while (<$fh>) {
+        chomp;
+        if (/^version:\s*(\S+)/i) {
+            $v = $1;
+            last;
+        }
+    }
+    $fh->close;
+    $v;
+} or die "Cannot find version in $spec_file\n";
+
+# Create the SPECS directory and copy the spec file to it.
+my $spec_dir = $dir->subdir('SPECS');
+make_path $spec_dir->stringify;
+my $spec_dest = $spec_dir->file("$name.spec");
+copy $spec_file, $spec_dest;
+
+# Create the SOURCES directory and export the repository to it.
+print "Archiving $name-$version\n" unless $opts{quiet};
+my $src_dir = $dir->subdir('SOURCES');
+make_path $src_dir->stringify;
+runx $git, 'archive', '--prefix', "$name-$version/", $git_head,
+    '-o' => $src_dir->file("$name-$version.tar.gz");
+
+# Determine dist tag, if any.
+my $dist = $opts{dist} || ($git_head eq 'master' ? '' : time . ".git_head");
+
+# Now build it!
+print "Creating RPM\n" unless $opts{quiet};
+runx 'rpmbuild', '-ba', '--define', "_topdir $dir",
+    ( $opts{quiet} ? '--quiet' : ()),
+    ( $dist ? ('--define', "dist $dist") : ()),
+    $spec_dest;
+
+# Move the RPMs here.
+for my $rpm ($dir->subdir(qw(RPMS noarch))->children) {
+    my $bn = $rpm->basename;
+    move $rpm, $bn;
+    print "* Copy $bn\n" unless $opts{quiet};
+}
+
+sub _pod2usage {
+    require Pod::Usage;
+    Pod::Usage::pod2usage(
+        '-verbose'  => 99,
+        '-sections' => '(?i:(Usage|Options))',
+        '-exitval'  => 1,
+        '-input'    => __FILE__,
+        @_
+    );
+}
