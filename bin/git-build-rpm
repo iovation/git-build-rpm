@@ -2,6 +2,7 @@
 
 use strict;
 use warnings;
+use v5.10;
 use Getopt::Long;
 use List::Util qw(first);
 use IPC::System::Simple 1.17 qw(runx capturex $EXITVAL);
@@ -118,3 +119,26 @@ sub _pod2usage {
         @_
     );
 }
+
+=head1 Name
+
+git-build-rpm - Build an RPM from a Git repository
+
+=head1 Synopsis
+
+  git build-rpm [--spec-file <file>]
+
+=head1 Description
+
+Given a spec file, this program archives the Git repository and creates an RPM
+for it.
+
+=head1 Author
+
+David Wheeler <david.wheeler@iovation.com>
+
+=head1 Copyright
+
+Copyright (c) 2012 iovation, Inc. All rights reserved.
+
+=cut
