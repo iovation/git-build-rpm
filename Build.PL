@@ -1,5 +1,8 @@
 use Module::Build;
 
+my $build_pkg = eval { require Module::Build::Iovation }
+  ? 'Module::Build::Iovation' : 'Module::Build';
+
 my $exec_path = `git --exec-path`;
 chomp $exec_path;
 my $man_path = `git --man-path`;
@@ -10,7 +13,7 @@ unless ($man_path) {
     ($man_path = $exec_path) =~ s/\blibexec\b.+/share${sep}man${sep}man1/;
 }
 
-my $build = Module::Build->new(
+my $build = $build_pkg->new(
     module_name        => 'git-build-rpm',
     license            => 'perl',
     dist_version_from  => 'bin/git-build-rpm',
@@ -32,5 +35,17 @@ my $build = Module::Build->new(
         File::Basename      => 0,
         Pod::Usage          => 0,
     },
+    requires_rpms => [qw[
+        git
+        perl(Getopt::Long)
+        perl(List::Util)
+        perl(IPC::System::Simple)
+        perl(File::Temp)
+        perl(Path::Class)
+        perl(File::Path)
+        perl(File::Copy)
+        perl(File::Basename)
+        perl(Pod::Usage)
+    ]],
 );
 $build->create_build_script;
