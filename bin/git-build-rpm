@@ -28,7 +28,7 @@ Getopt::Long::GetOptions(
 
 # Handle documentation requests.
 _pod2usage(
-    ( $opts{man} ? ( '-sections' => '.+' ) : ()),
+    ( $opts{man} ? ( '-verbose' => 2 ) : ()),
     '-exitval' => 0,
 ) if $opts{help} or $opts{man};
 
@@ -128,10 +128,107 @@ git-build-rpm - Build an RPM from a Git repository
 
   git build-rpm [--spec-file <file>]
 
+=head1 Usage
+
+  git build-rpm --spec-file myproj.spec
+
 =head1 Description
 
 Given a spec file, this program archives the Git repository and creates an RPM
 for it.
+
+=head1 Options
+
+     --spec-file  FILE    Path to RPM spec file.
+     --git        PATH    Path to git program.
+     --git-branch BRANCH  Git branch to build from.
+     --dist       DIST    Name of distribution, used in RPM release name.
+     --rpm-dir    DIR     Path to directory for building the RPM.
+     --quiet              Print as little as possible.
+  -V --version            Print the version number and exit.
+  -H --help               Print a usage statement and exit.
+  -M --man                Print the complete documentation and exit.
+
+=head1 Options Details
+
+=over
+
+=item C<--spec>
+
+=item C<--spec-file>
+
+  git build-rpm --spec-file myproj.spec
+  git build-rpm --spec yourproj.spec
+
+Path to the project spec file. If not specified, defaults to F<dist/$projname.spec>.
+where the project name is extracted from the origin remote URL.
+
+=item C<--git>
+
+  git build-rpm --git /path/to/git
+
+Seems like it ought to be able to find git on its own, right? Well, probably;
+it default to finding it in your path.
+
+=item C<-b>
+
+=item C<--branch>
+
+=item C<--git-branch>
+
+  git build-rpm --git-branch develop
+  git build-rpm --branch master
+  git build-rpm -b staging
+
+Specifies the name of the Git branch (or any commit identifier, really) to use
+for the build. Defaults to the currently checked-out branch.
+
+=item C<--dir>
+
+=item C<--rpm-dir>
+
+  git build-rpm --dir /tmp/foo
+  git build-rpm --rpm-dir ~/rpm
+
+Specifies the name of the directory to use for building the RPM. If not
+specified, a temporary directory will be created, which will be deleted when
+the program exits.
+
+=item C<--quiet>
+
+  git build-rpm --quiet
+
+Normally C<rpmbuild> is quite noisy. Use this option to make things as quiet
+as possible. Only errors will show up.
+
+=item C<-H>
+
+=item C<--help>
+
+  git build-rpm --help
+  git build-rpm -H
+
+Outputs a brief description of the options and exits.
+
+=item C<-M>
+
+=item C<--man>
+
+  git build-rpm --man
+  git build-rpm -M
+
+Outputs this documentation and exits.
+
+=item C<-V>
+
+=item C<--version>
+
+  git build-rpm --version
+  git build-rpm -V
+
+Outputs the program name and version and exits.
+
+=back
 
 =head1 Author
 
