@@ -35,6 +35,9 @@ for it.
 %{__perl} Build.PL
 ./Build
 
+%check
+./Build test
+
 %install
 rm -rf $RPM_BUILD_ROOT
 ./Build install destdir=$RPM_BUILD_ROOT create_packlist=0
