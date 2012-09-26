@@ -22,6 +22,7 @@ my $build = $build_pkg->new(
     pm_files           => {},
     configure_requires => { 'Module::Build' => '0.35' },
     build_requires     => { 'Module::Build' => '0.35' },
+    recommends         => { 'Test::Pod' => '1.20' },
     install_path       => { script => $exec_path, bindoc => $man_path },
     requires           => {
         perl                => '5.010',
