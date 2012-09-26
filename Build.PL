@@ -37,6 +37,7 @@ my $build = $build_pkg->new(
     },
     requires_rpms => [qw[
         git
+        perl(Test::Pod)
         perl(Getopt::Long)
         perl(List::Util)
         perl(IPC::System::Simple)
