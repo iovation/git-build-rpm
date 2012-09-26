@@ -36,18 +36,6 @@ my $build = $build_pkg->new(
         File::Basename      => 0,
         Pod::Usage          => 0,
     },
-    requires_rpms => [qw[
-        git
-        perl(Test::Pod)
-        perl(Getopt::Long)
-        perl(List::Util)
-        perl(IPC::System::Simple)
-        perl(File::Temp)
-        perl(Path::Class)
-        perl(File::Path)
-        perl(File::Copy)
-        perl(File::Basename)
-        perl(Pod::Usage)
-    ]],
+    requires_rpms => [qw(git)],
 );
 $build->create_build_script;
