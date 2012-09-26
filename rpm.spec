@@ -1,6 +1,6 @@
 Name:    		git-build-rpm
 Summary:    	Build an RPM from a Git repository
-Version:    	0.90
+Version:    	0.91
 Release:    	1%{?dist}
 Group:          Development/Libraries
 License:    	Proprietary
@@ -55,5 +55,8 @@ echo "%{gitman}/man1/*"
 %{gitbin}/*
 
 %changelog
+* Wed Sep 26 2012 David E. Wheeler <david.wheeler@iovation.com> 0.91-1
+- Upgrade to v0.91.g
+
 * Fri Sep 21 2012 David E. Wheeler <david.wheeler@iovation.com> 0.90-1
 - initial RPM
