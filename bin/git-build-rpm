@@ -17,6 +17,7 @@ my %opts = ( git => 'git' );
 Getopt::Long::GetOptions(
     'git=s'                 => \$opts{git},
     'spec-file|spec=s'      => \$opts{spec_file},
+    'package-name|p=s'      => \$opts{package_name},
     'dist|d=s'              => \$opts{dist},
     'git-branch|branch|b=s' => \$opts{git_branch},
     'rpm-dir|dir=s'         => \$opts{rpm_dir},
@@ -49,7 +50,7 @@ my $name = $opts{package_name} || do {
     my $origin = first { /^origin/ } @remotes;
     $origin ||= $remotes[0];
     die "Cannot detect project name; use --package-name\n"
-        unless $origin =~ m{([^/]+)[.]git\b};
+        unless $origin =~ m{([^/:]+)[.]git\b};
     $1;
 };
 
