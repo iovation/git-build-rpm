@@ -1,7 +1,7 @@
 Name:    		git-build-rpm
 Summary:    	Build an RPM from a Git repository
 Version:    	0.92
-Release:    	1%{?dist}
+Release:    	2%{?dist}
 Group:          Development/Libraries
 License:    	Proprietary
 Source0:    	%{name}-%{version}.tar.gz
@@ -11,6 +11,7 @@ BuildRequires:  perl >= 1:v5.10.1
 BuildRequires:  perl(Module::Build) >= 0.35
 BuildRequires:  perl(Test::Pod) >= 1.20
 Requires:       git
+Requires:       rpm-build
 Requires:       perl(Getopt::Long)
 Requires:       perl(List::Util)
 Requires:       perl(IPC::System::Simple) >= 1.17
@@ -56,6 +57,9 @@ echo "%{gitman}/man1/*"
 %{gitbin}/*
 
 %changelog
+* Thu Oct 18 2012 David E. Wheeler <david.wheeler@iovation.com> 0.92-2
+- Add missing rpm-build dependency.
+
 * Thu Oct 4 2012 David E. Wheeler <david.wheeler@iovation.com> 0.92-1
 - Add missing --package-name option.
 - Now exclude ":" when detecting the package name from the git URL.

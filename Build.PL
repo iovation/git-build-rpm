@@ -36,6 +36,6 @@ my $build = $build_pkg->new(
         File::Basename      => 0,
         Pod::Usage          => 0,
     },
-    requires_rpms => [qw(git)],
+    requires_rpms => [qw(git rpm-build)],
 );
 $build->create_build_script;
