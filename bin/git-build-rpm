@@ -89,7 +89,7 @@ runx $git, 'archive', '--prefix', "$name-$version/", $git_head,
     '-o' => $src_dir->file("$name-$version.tar.gz");
 
 # Determine dist tag, if any.
-my $dist = $opts{dist} || ($git_head eq 'master' ? '' : time . ".git_head");
+my $dist = $opts{dist} || ($git_head eq 'master' ? '' : time . ".$git_head");
 
 # Now build it!
 print "Creating RPM\n" unless $opts{quiet};

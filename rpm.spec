@@ -1,7 +1,7 @@
 Name:    		git-build-rpm
 Summary:    	Build an RPM from a Git repository
-Version:    	0.92
-Release:    	2%{?dist}
+Version:    	0.93
+Release:    	1%{?dist}
 Group:          Development/Libraries
 License:    	Proprietary
 Source0:    	%{name}-%{version}.tar.gz
@@ -57,6 +57,10 @@ echo "%{gitman}/man1/*"
 %{gitbin}/*
 
 %changelog
+* Fri Oct 19 2012 David E. Wheeler <david.wheeler@iovation.com> 0.93-1
+- Default %dist value now includes the name of the git head, rather than
+  "git_head".
+
 * Thu Oct 18 2012 David E. Wheeler <david.wheeler@iovation.com> 0.92-2
 - Add missing rpm-build dependency.
 
