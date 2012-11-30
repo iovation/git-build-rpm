@@ -42,7 +42,12 @@ if ($opts{version}) {
 
 # Figure out what branch we're on.
 my $git      = $opts{git};
-my $git_head = $opts{git_branch} || 'HEAD';
+my $git_head = $opts{git_branch} || do {
+    my $line = first {/^[*]\s(.+)$/ } capturex $git, 'branch';
+    die "Cannot detect current git branch; use --git-branch\n"
+        unless $line =~ /^[*]\s(.+)$/;
+    $1 eq '(no branch)' ? 'HEAD' : $1;
+};
 
 # Get the name of the project.
 my $name = $opts{package_name} || do {
@@ -177,7 +182,8 @@ it default to finding it in your path.
   git build-rpm -b staging
 
 Specifies the name of the Git branch (or any commit identifier, really) to use
-for the build. Defaults to C<HEAD>.
+for the build. Defaults to the currently checked-out branch unless the
+checkout is detatched, in which case the value will be C<HEAD>.
 
 =item C<--dir>
 
