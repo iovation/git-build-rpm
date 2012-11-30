@@ -25,7 +25,7 @@ Getopt::Long::GetOptions(
     'quiet!'                => \$opts{quiet},
     'man|M'                 => \$opts{man},
     'version|V'             => \$opts{version},
-) or pod2usage();
+) or _pod2usage();
 
 # Handle documentation requests.
 _pod2usage(
@@ -89,7 +89,10 @@ runx $git, 'archive', '--prefix', "$name-$version/", $git_head,
     '-o' => $src_dir->file("$name-$version.tar.gz");
 
 # Determine dist tag, if any.
-my $dist = $opts{dist} || ($git_head eq 'master' ? '' : time . ".$git_head");
+my $dist = $opts{dist} || do {
+    (my $branch = $git_head) =~ s{.+/}{};
+    $branch eq 'master' ? '' : (time . ".$branch");
+};
 
 # Now build it!
 print "Creating RPM\n" unless $opts{quiet};
@@ -137,7 +140,7 @@ sub find_branch {
     if (my $line = first { m{/} && $_ !~ /^[*]/ } @lines) {
         # It's a remote branch. Keep only the last part of the name.
         chomp $line;
-        $line =~ s/^\s+//;
+        return $line if $line =~ s{^\s+remotes/}{};
         return $1 if $line =~ m{([^/]+)$};
     }
 
