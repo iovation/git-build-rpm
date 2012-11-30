@@ -10,7 +10,7 @@ use File::Temp;
 use Path::Class;
 use File::Path qw(make_path);
 use File::Copy qw(move copy);
-our $VERSION = '0.95';
+our $VERSION = '0.96';
 
 Getopt::Long::Configure (qw(bundling));
 my %opts = ( git => 'git' );
@@ -117,7 +117,7 @@ sub _pod2usage {
 }
 
 sub find_branch {
-    my @lines = capturex $git, qw(branch --contains HEAD)
+    my @lines = capturex $git, qw(branch -a --contains HEAD)
         or die "Cannot detect current git branch; use --git-branch\n";
 
     if (my $line = first {/^[*]\s.+$/ } @lines) {

@@ -1,6 +1,6 @@
 Name:    		git-build-rpm
 Summary:    	Build an RPM from a Git repository
-Version:    	0.95
+Version:    	0.96
 Release:    	1%{?dist}
 Group:          Development/Libraries
 License:    	Proprietary
@@ -57,7 +57,11 @@ echo "%{gitman}/man1/*"
 %{gitbin}/*
 
 %changelog
-* Thu Nov 29 2012 David E. Wheeler <david.wheeler@iovation.com> 0.945-1
+* Thu Nov 29 2012 David E. Wheeler <david.wheeler@iovation.com> 0.96-1
+- Fixed bug where the search for a branch name did not include remote
+  branches.
+
+* Thu Nov 29 2012 David E. Wheeler <david.wheeler@iovation.com> 0.95-1
 - Try even harder to find the current branch mame. If HEAD is detached, see if
   some local branch contains it. If not, see if a remote branch contains it.
 
