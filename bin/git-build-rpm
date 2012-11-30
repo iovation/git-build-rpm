@@ -42,12 +42,7 @@ if ($opts{version}) {
 
 # Figure out what branch we're on.
 my $git      = $opts{git};
-my $git_head = $opts{git_branch} || do {
-    my $line = first {/^[*]\s(.+)$/ } capturex $git, 'branch';
-    die "Cannot detect current git branch; use --git-branch\n"
-        unless $line =~ /^[*]\s(.+)$/;
-    $1 eq '(no branch)' ? 'HEAD' : $1;
-};
+my $git_head = $opts{git_branch} || find_branch();
 
 # Get the name of the project.
 my $name = $opts{package_name} || do {
@@ -119,6 +114,34 @@ sub _pod2usage {
         '-input'    => __FILE__,
         @_
     );
+}
+
+sub find_branch {
+    my @lines = capturex $git, qw(branch --contains HEAD)
+        or die "Cannot detect current git branch; use --git-branch\n";
+
+    if (my $line = first {/^[*]\s.+$/ } @lines) {
+        # Return the branch unless it's detached.
+        chomp $line;
+        $line =~ s/^[*]\s//;
+        return $line unless $line eq '(no branch)';
+    }
+
+    if (my $line = first { $_ !~ m{/} && $_ !~ /^[*]/ } @lines) {
+        # HEAD is from a local branch.
+        chomp $line;
+        $line =~ s/^\s+//;
+        return $line;
+    }
+
+    if (my $line = first { m{/} && $_ !~ /^[*]/ } @lines) {
+        # It's a remote branch. Keep only the last part of the name.
+        chomp $line;
+        $line =~ s/^\s+//;
+        return $1 if $line =~ m{([^/]+)$};
+    }
+
+    die "Cannot detect current git branch; use --git-branch\n"
 }
 
 =head1 Name
