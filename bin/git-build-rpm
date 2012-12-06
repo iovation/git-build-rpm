@@ -141,7 +141,7 @@ sub find_branch {
         # It's in a remote branch. Prefer master.
         my $line = first { m{origin/master$} } @cands;
         $line ||=  first { m{/master$} } @cands;
-        $line ||= @cands[0];
+        $line ||= $cands[0];
 
         # Keep only the last part of the name.
         chomp $line;
