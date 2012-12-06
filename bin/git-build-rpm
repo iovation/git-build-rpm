@@ -10,7 +10,7 @@ use File::Temp;
 use Path::Class;
 use File::Path qw(make_path);
 use File::Copy qw(move copy);
-our $VERSION = '0.97';
+our $VERSION = '0.98';
 
 Getopt::Long::Configure (qw(bundling));
 my %opts = ( git => 'git' );
@@ -137,8 +137,13 @@ sub find_branch {
         return $line;
     }
 
-    if (my $line = first { m{/} && $_ !~ /^[*]/ } @lines) {
-        # It's a remote branch. Keep only the last part of the name.
+    if (my @cands = grep { m{/} && $_ !~ /^[*]/ && $_ !~ /->/ } @lines) {
+        # It's in a remote branch. Prefer master.
+        my $line = first { m{origin/master$} } @cands;
+        $line ||=  first { m{/master$} } @cands;
+        $line ||= @cands[0];
+
+        # Keep only the last part of the name.
         chomp $line;
         return $line if $line =~ s{^\s+remotes/}{};
         return $1 if $line =~ m{([^/]+)$};
