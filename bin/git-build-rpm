@@ -91,7 +91,7 @@ runx $git, 'archive', '--prefix', "$name-$version/", $git_head,
 # Determine dist tag, if any.
 my $dist = $opts{dist} || do {
     (my $branch = $git_head) =~ s{.+/}{};
-    $branch eq 'master' ? '' : (time . ".$branch");
+    time . ($branch eq 'master' ? '' : ".$branch");
 };
 
 # Now build it!
@@ -215,6 +215,15 @@ it default to finding it in your path.
 Specifies the name of the Git branch (or any commit identifier, really) to use
 for the build. Defaults to the currently checked-out branch unless the
 checkout is detatched, in which case the value will be C<HEAD>.
+
+=item C<--dist>
+
+  git build-rpm --dist 12345
+
+Sets the C<Dist> RPM variable. This is most often appended to the Release
+number, if any. Defaults to the current timestamp, a dot, and the branch name,
+unless the branch name is "master", in which case it defaults to the current
+timestamp only.
 
 =item C<--dir>
 
