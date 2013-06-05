@@ -1,8 +1,5 @@
 use Module::Build;
 
-my $build_pkg = eval { require Module::Build::Iovation }
-  ? 'Module::Build::Iovation' : 'Module::Build';
-
 my $exec_path = `git --exec-path`;
 chomp $exec_path;
 my $man_path = `git --man-path`;
@@ -13,7 +10,7 @@ unless ($man_path) {
     ($man_path = $exec_path) =~ s/\blibexec\b.+/share${sep}man${sep}man1/;
 }
 
-my $build = $build_pkg->new(
+my $build = Module::Build->new(
     module_name        => 'git-build-rpm',
     license            => 'perl',
     dist_version_from  => 'bin/git-build-rpm',
