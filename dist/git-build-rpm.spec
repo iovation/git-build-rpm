@@ -1,6 +1,6 @@
 Name:    		git-build-rpm
 Summary:    	Build an RPM from a Git repository
-Version:    	0.98
+Version:    	0.99
 Release:    	1%{?dist}
 Group:          Development/Libraries
 License:    	Proprietary
@@ -57,6 +57,11 @@ echo "%{gitman}/man1/*"
 %{gitbin}/*
 
 %changelog
+* Wed Jun 5 2013 David E. Wheeler <david.wheeler@iovation.com> 0.99-1
+- Now using `git-build-rpm` itself to build the RPM, rather than
+  Module::Build::Iovation.
+- Added documentation for previously-undocumented option --package-name.
+
 * Wed Dec 5 2012 David E. Wheeler <david.wheeler@iovation.com> 0.98-1
 - Updated the Git branch so that if there are multiple possible remote
   branches to choose from, "origin/master" and "*/master" are preferred.
