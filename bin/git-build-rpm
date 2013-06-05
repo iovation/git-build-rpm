@@ -171,15 +171,16 @@ for it.
 
 =head1 Options
 
-     --spec-file  FILE    Path to RPM spec file.
-     --git        PATH    Path to git program.
-     --git-branch BRANCH  Git branch to build from.
-     --dist       DIST    Name of distribution, used in RPM release name.
-     --rpm-dir    DIR     Path to directory for building the RPM.
-     --quiet              Print as little as possible.
-  -V --version            Print the version number and exit.
-  -H --help               Print a usage statement and exit.
-  -M --man                Print the complete documentation and exit.
+     --spec-file    FILE     Path to RPM spec file.
+     --git          PATH     Path to git program.
+     --git-branch   BRANCH   Git branch to build from.
+ -p  --package-name PAKCKAGE Name of the project, used to archive the repo.
+     --dist         DIST     Name of distribution, used in RPM release name.
+     --rpm-dir      DIR      Path to directory for building the RPM.
+     --quiet                 Print as little as possible.
+  -V --version               Print the version number and exit.
+  -H --help                  Print a usage statement and exit.
+  -M --man                   Print the complete documentation and exit.
 
 =head1 Options Details
 
@@ -215,6 +216,13 @@ it default to finding it in your path.
 Specifies the name of the Git branch (or any commit identifier, really) to use
 for the build. Defaults to the currently checked-out branch unless the
 checkout is detatched, in which case the value will be C<HEAD>.
+
+=item C<-p>
+
+=item C<--package-name>
+
+Specifies the name of the distiribution package. Should be the same as the
+name of the resulting RPM. Defaults to the name of the Git repository.
 
 =item C<--dist>
 
