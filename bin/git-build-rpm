@@ -85,8 +85,8 @@ copy $spec_file, $spec_dest;
 print "Archiving $name-$version\n" unless $opts{quiet};
 my $src_dir = $dir->subdir('SOURCES');
 make_path $src_dir->stringify;
-runx $git, 'archive', '--prefix', "$name-$version/", $git_head,
-    '-o' => $src_dir->file("$name-$version.tar.gz");
+runx $git, 'archive-all', '--force-submodules', '--prefix', "$name-$version/",
+    $src_dir->file("$name-$version.tar.gz");
 
 # Determine dist tag, if any.
 my $dist = $opts{dist} || do {
