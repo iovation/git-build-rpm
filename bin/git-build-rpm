@@ -10,7 +10,7 @@ use File::Temp;
 use Path::Class;
 use File::Path qw(make_path);
 use File::Copy qw(move copy);
-our $VERSION = '0.99';
+our $VERSION = '1.0';
 
 Getopt::Long::Configure (qw(bundling));
 my %opts = ( git => 'git' );

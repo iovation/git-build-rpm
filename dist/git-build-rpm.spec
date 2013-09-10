@@ -1,6 +1,6 @@
 Name:    		git-build-rpm
 Summary:    	Build an RPM from a Git repository
-Version:    	0.99
+Version:    	1.0
 Release:    	1%{?dist}
 Group:          Development/Libraries
 License:    	Proprietary
@@ -58,6 +58,10 @@ echo "%{gitman}/man1/*"
 %{gitbin}/*
 
 %changelog
+* Tue Sep 10 2013 David E. Wheeler <david.wheeler@iovation.com> 1.0-1
+- Now using `git-archive-all` when creating the archive, so that submodules
+  will be archived, as well.
+
 * Wed Jun 5 2013 David E. Wheeler <david.wheeler@iovation.com> 0.99-1
 - Now using `git-build-rpm` itself to build the RPM, rather than
   Module::Build::Iovation.
