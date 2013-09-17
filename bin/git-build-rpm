@@ -105,7 +105,7 @@ runx 'rpmbuild', '-ba', '--define', "_topdir $dir",
 $dir->subdir('RPMS')->recurse(callback => sub {
     my $rpm = shift;
     my $bn = $rpm->basename;
-    next if $bn !~ /[.]rpm$/;
+    return if $bn !~ /[.]rpm$/;
     move $rpm, $bn;
     print "* Copy $bn\n" unless $opts{quiet};
 });
