@@ -2,7 +2,7 @@ use Module::Build;
 
 my $exec_path = `git --exec-path`;
 chomp $exec_path;
-my $man_path = `git --man-path`;
+my $man_path = `git --man-path 2> /dev/null`;
 chomp $man_path;
 unless ($man_path) {
     # --man-dir not implemented; derive it from the exec path.
