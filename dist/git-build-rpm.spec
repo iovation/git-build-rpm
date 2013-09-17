@@ -1,6 +1,6 @@
 Name:    		git-build-rpm
 Summary:    	Build an RPM from a Git repository
-Version:    	1.0
+Version:    	1.1
 Release:    	1%{?dist}
 Group:          Development/Libraries
 License:    	Proprietary
