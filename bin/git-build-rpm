@@ -10,7 +10,7 @@ use File::Temp;
 use Path::Class;
 use File::Path qw(make_path);
 use File::Copy qw(move copy);
-our $VERSION = '1.0';
+our $VERSION = '1.1';
 
 Getopt::Long::Configure (qw(bundling));
 my %opts = ( git => 'git' );
@@ -102,11 +102,13 @@ runx 'rpmbuild', '-ba', '--define', "_topdir $dir",
     $spec_dest;
 
 # Move the RPMs here.
-for my $rpm ($dir->subdir(qw(RPMS noarch))->children) {
+$dir->subdir('RPMS')->recurse(callback => sub {
+    my $rpm = shift;
     my $bn = $rpm->basename;
+    next if $bn !~ /[.]rpm$/;
     move $rpm, $bn;
     print "* Copy $bn\n" unless $opts{quiet};
-}
+});
 
 sub _pod2usage {
     require Pod::Usage;

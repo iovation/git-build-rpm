@@ -58,6 +58,9 @@ echo "%{gitman}/man1/*"
 %{gitbin}/*
 
 %changelog
+* Tue Sep 17 2013 David E. Wheeler <david.wheeler@iovation.com> 1.1-1
+- Now copies all RPMs, not just `noarch` RPMs (Thanks Damon!).
+
 * Tue Sep 10 2013 David E. Wheeler <david.wheeler@iovation.com> 1.0-1
 - Now using `git-archive-all` when creating the archive, so that submodules
   will be archived, as well.
