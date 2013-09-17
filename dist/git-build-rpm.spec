@@ -25,7 +25,7 @@ Requires:       perl(Pod::Usage)
 BuildArch:	    noarch
 
 %define gitbin %(git --exec-path)
-%define gitman %(%{__perl} -E 'my $m = `git --man-path`; print $m if $m; ($m = shift) =~ s{libexec\.+}{share/man}; print $m' %{gitbin})
+%define gitman %(%{__perl} -E 'my $m = `git --man-path 2> /dev/null`; print $m if $m; ($m = shift) =~ s{libexec\.+}{share/man}; print $m' %{gitbin})
 
 %description
 Given a spec file, this program archives the Git repository and creates an RPM
