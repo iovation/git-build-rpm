@@ -1,6 +1,6 @@
 Name:    		git-build-rpm
 Summary:    	Build an RPM from a Git repository
-Version:    	1.1
+Version:    	1.2
 Release:    	1%{?dist}
 Group:          Development/Libraries
 License:    	Proprietary
@@ -58,6 +58,9 @@ echo "%{gitman}/man1/*"
 %{gitbin}/*
 
 %changelog
+* Thu Jan 9 2014 - David E. Wheeler <david.wheeler@iovation.com> 1.2.1
+- Added the --define option to define macros.
+
 * Tue Sep 17 2013 David E. Wheeler <david.wheeler@iovation.com> 1.1-1
 - Now copies all RPMs, not just `noarch` RPMs (Thanks Damon!).
 
