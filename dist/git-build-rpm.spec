@@ -1,7 +1,7 @@
 Name:    		git-build-rpm
 Summary:    	Build an RPM from a Git repository
-Version:    	1.2
-Release:    	2%{?dist}
+Version:    	1.3
+Release:    	1%{?dist}
 Group:          Development/Libraries
 License:    	Proprietary
 Source0:    	%{name}-%{version}.tar.gz
@@ -56,10 +56,13 @@ find $RPM_BUILD_ROOT -depth -type d -exec rmdir {} 2>/dev/null \;
 %{gitbin}/*
 
 %changelog
-* Mon Jun 30 2014 - David E. Wheeler <david.wheeler@iovation.com> 1.2.1-2
+* Thu May 7 2015 - David E. Wheeler <david.wheeler@iovation.com> 1.3-1
+- Restored OS name part to the %dist macro.
+
+* Mon Jun 30 2014 - David E. Wheeler <david.wheeler@iovation.com> 1.2-2
 - Fixed location of man page on CentOS 6.5.
 
-* Thu Jan 9 2014 - David E. Wheeler <david.wheeler@iovation.com> 1.2.1-1
+* Thu Jan 9 2014 - David E. Wheeler <david.wheeler@iovation.com> 1.2-1
 - Added the --define option to define macros.
 
 * Tue Sep 17 2013 David E. Wheeler <david.wheeler@iovation.com> 1.1-1

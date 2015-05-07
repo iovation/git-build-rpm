@@ -10,7 +10,7 @@ use File::Temp;
 use Path::Class;
 use File::Path qw(make_path);
 use File::Copy qw(move copy);
-our $VERSION = '1.1';
+our $VERSION = '1.3';
 
 Getopt::Long::Configure (qw(bundling));
 my %opts = ( git => 'git' );
@@ -92,7 +92,9 @@ runx $git, 'archive-all', '--force-submodules', '--prefix', "$name-$version/",
 # Determine dist tag, if any.
 my $dist = $opts{dist} || do {
     (my $branch = $git_head) =~ s{.+/}{};
-    time . ($branch eq 'master' ? '' : ".$branch");
+    my $os = capturex(qw(rpm --eval %dist));
+    chomp $os;
+    time . ($branch eq 'master' ? '' : ".$branch") . $os;
 };
 
 # Now build it!
@@ -234,9 +236,9 @@ name of the resulting RPM. Defaults to the name of the Git repository.
   git build-rpm --dist 12345
 
 Sets the C<Dist> RPM variable. This is most often appended to the Release
-number, if any. Defaults to the current timestamp, a dot, and the branch name,
-unless the branch name is "master", in which case it defaults to the current
-timestamp only.
+number, if any. Defaults to the current timestamp, a dot, the branch name,
+another dot, then the usual RPM C<%dist> value, such as C<el7>. If the branch
+name is "master", the branch name will noe be included.
 
 =item C<-D>
 
