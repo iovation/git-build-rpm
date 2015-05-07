@@ -126,6 +126,7 @@ sub _pod2usage {
 }
 
 sub find_branch {
+    return $ENV{GIT_BRANCH} if $ENV{GIT_BRANCH};
     my @lines = capturex $git, qw(branch -a --contains HEAD)
         or die "Cannot detect current git branch; use --git-branch\n";
 
