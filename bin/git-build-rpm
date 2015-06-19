@@ -60,7 +60,7 @@ my $spec_file = file $opts{spec_file} || ('dist', "$name.spec");
 
 die "$spec_file does not exist; use --spec-file\n" unless -e $spec_file;
 
-# Extract the name from the spec file.
+# Extract the version from the spec file.
 my $version = do {
     my $fh = $spec_file->open('<:encoding(UTF-8)')
         or die "Cannot open $spec_file: $!\n";
@@ -178,7 +178,7 @@ for it.
 
 =head1 Options
 
-     --spec-file    FILE        Path to R  PM spec file.
+     --spec-file    FILE        Path to RPM spec file.
      --git          PATH        Path to git program.
      --git-branch   BRANCH      Git branch to build from.
  -p  --package-name PAKCKAGE    Name of the project, used to archive the repo.
@@ -303,6 +303,6 @@ David E. Wheeler <david.wheeler@iovation.com>
 
 =head1 Copyright
 
-Copyright (c) 2012 iovation, Inc. All rights reserved.
+Copyright (c) 2012-2015 iovation, Inc. All rights reserved.
 
 =cut
