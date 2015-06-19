@@ -1,4 +1,4 @@
-Name:    		git-build-rpm
+Name:           git-build-rpm
 Summary:    	Build an RPM from a Git repository
 Version:    	1.3
 Release:    	1%{?dist}
