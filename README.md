@@ -26,7 +26,10 @@ Installation
 
 Install dependencies:
 
-    sudo yum install 'perl(Module::Build)' 'perl(IPC::System::Simple)' 'perl(Path::Class)'
+    sudo yum install git git-archive-all rpm-build \
+                     'perl(Module::Build)' \
+                     'perl(IPC::System::Simple)' \
+                     'perl(Path::Class)'
 
 Build and install from Source:
 
