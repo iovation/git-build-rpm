@@ -92,6 +92,9 @@ runx $git, 'archive-all', '--force-submodules', '--prefix', "$name-$version/",
 # Determine dist tag, if any.
 my $dist = $opts{dist} || do {
     (my $branch = $git_head) =~ s{.+/}{};
+    # Replace invalid characters.
+    # https://fedoraproject.org/wiki/Packaging:NamingGuidelines#CommonCharacterSet
+    $branch =~ s/[^a-zA-Z0-9._+]+/_/g; # Exclude -, not allowed in dist.
     my $os = capturex(qw(rpm --eval %dist));
     chomp $os;
     time . ($branch eq 'master' ? '' : ".$branch") . $os;

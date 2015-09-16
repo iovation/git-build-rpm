@@ -80,12 +80,15 @@ Here's what `git-build-rpm` does when you run it:
 
 *   Copies the spec file to the RPM build directory.
 
-*   Archives the specified branch of the repository, as well as any submodules, into the RPM build directory.
+*   Archives the specified branch of the repository, as well as any
+    submodules, into the RPM build directory.
 
 *   Determines the RPM `dist` value via the `--dist` option, defaulting to the
     current epoch time and OS version. If the current branch is not "master",
-    the branch name is also included in the `dist` value. That is, the value
-    is something like `1434755064.el7` when building master, and `1434755064.$branch_name_.el7` when building from any other branch.
+    the branch name is also included in the `dist` value (with any invalid
+    characters replaced with underscores). That is, the value is something
+    like `1434755064.el7` when building master, and
+    `1434755064.$branch_name_.el7` when building from any other branch.
 
 *   Builds the RPM, setting `dist` and any other parameters passed via the
     `--define` option.
