@@ -61,13 +61,16 @@ my $spec_file = file $opts{spec_file} || ('dist', "$name.spec");
 die "$spec_file does not exist; use --spec-file\n" unless -e $spec_file;
 
 # Extract the version from the spec file.
-my $version = do {
+my $version = eval {
+    # Just ignore failure, likely because rpmspec is not available.
+    capturex( 'rpmspec', '-q', '--qf', '%{version}', $spec_file );
+} || do {
     my $fh = $spec_file->open('<:encoding(UTF-8)')
         or die "Cannot open $spec_file: $!\n";
     my $v;
     while (<$fh>) {
         chomp;
-        if (/^version:\s*(\S+)/i) {
+        if (/^version:\s*(.+)\s*$/i) {
             $v = $1;
             last;
         }
@@ -75,6 +78,9 @@ my $version = do {
     $fh->close;
     $v;
 } or die "Cannot find version in $spec_file\n";
+
+die "Unexpanded macro in $spec_file version: $1\n"
+    if $version =~ /(%[{\(][^\)}]*[\)}])/;
 
 # Create the SPECS directory and copy the spec file to it.
 my $spec_dir = $dir->subdir('SPECS');
