@@ -72,6 +72,8 @@ my $version = eval {
         chomp;
         if (/^version:\s*(.+)\s*$/i) {
             $v = $1;
+            # Try to expand macros
+            $v = capturex( 'rpm', '-E', $v ) if $v =~ /%/;
             last;
         }
     }
