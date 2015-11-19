@@ -76,7 +76,10 @@ Here's what `git-build-rpm` does when you run it:
 *   Determines the path to the RPM spec file, via the `--spec-file` option
     or by looking for a file named `./dist/$package_name.spec`.
 
-*   Extracts the version from the spec file.
+*   Extracts the version from the spec file. It tries using `rpmspec`, but if
+    it's not available, it parses the version from the spec file directly. If
+    that extracted version appears to be a macro, it will be run through `rpm
+    -E` for evaluation.
 
 *   Copies the spec file to the RPM build directory.
 
