@@ -63,7 +63,7 @@ die "$spec_file does not exist; use --spec-file\n" unless -e $spec_file;
 # Extract the version from the spec file.
 my $version;
 eval {
-  $version = capturex( 'rpmspec', '-q', '--qf', '%{version}', $spec_file );
+  #$version = capturex( 'rpmspec', '-q', '--qf', '%{version}', $spec_file );
 };
 
 if( ! defined $version ) {
@@ -79,6 +79,10 @@ if( ! defined $version ) {
           }
       }
       $fh->close;
+      # try to expand macros
+      if( $v =~ /%/ ) {
+        $v = capturex( 'rpm', '-E', $v );
+      }
       $v;
   } or die "Cannot find version in $spec_file\n";
 }
