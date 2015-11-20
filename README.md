@@ -24,12 +24,22 @@ of choice.
 Installation
 ------------
 
-Install dependencies:
+Install dependencies(Using YUM):
 
     sudo yum install git git-archive-all rpm-build \
                      'perl(Module::Build)' \
                      'perl(IPC::System::Simple)' \
                      'perl(Path::Class)'
+
+
+
+Install dependencies(Using DNF and pip):
+
+    sudo dnf install git rpm-build perl-rpm-build-perl perl-IPC-System-Simple \
+    			perl-Path-Class perl-Test-Pod perl-Module-Build
+
+    sudo pip install --upgrade pip
+    sudo pip install git-archive-all
 
 Build and install from Source:
 
