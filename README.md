@@ -24,7 +24,7 @@ of choice.
 Installation
 ------------
 
-Install dependencies(Using YUM):
+Install dependencies via YUM:
 
     sudo yum install git git-archive-all rpm-build \
                      'perl(Module::Build)' \
@@ -33,7 +33,7 @@ Install dependencies(Using YUM):
 
 
 
-Install dependencies(Using DNF and pip):
+Install dependencies via DNF and pip:
 
     sudo dnf install git rpm-build perl-rpm-build-perl perl-IPC-System-Simple \
     			perl-Path-Class perl-Test-Pod perl-Module-Build
