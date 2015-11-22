@@ -1,0 +1,41 @@
+From 222cfd72479f18f67dee6f8ac20d3589f3995622 Mon Sep 17 00:00:00 2001
+From: aikidouke <zachvatwork@gmail.com>
+Date: Fri, 20 Nov 2015 16:59:17 -0500
+Subject: [PATCH] added dnf and pip pre-req install instructions
+
+---
+ README.md | 12 +++++++++++-
+ 1 file changed, 11 insertions(+), 1 deletion(-)
+
+diff --git a/README.md b/README.md
+index bba8861..e9caf8c 100644
+--- a/README.md
++++ b/README.md
+@@ -24,13 +24,23 @@ of choice.
+ Installation
+ ------------
+ 
+-Install dependencies:
++Install dependencies(Using YUM):
+ 
+     sudo yum install git git-archive-all rpm-build \
+                      'perl(Module::Build)' \
+                      'perl(IPC::System::Simple)' \
+                      'perl(Path::Class)'
+ 
++
++
++Install dependencies(Using DNF and pip):
++
++    sudo dnf install git rpm-build perl-rpm-build-perl perl-IPC-System-Simple \
++    			perl-Path-Class perl-Test-Pod perl-Module-Build
++
++    sudo pip install --upgrade pip
++    sudo pip install git-archive-all
++
+ Build and install from Source:
+ 
+     perl Build.PL
+-- 
+2.5.0
+
