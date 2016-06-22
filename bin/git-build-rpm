@@ -63,7 +63,7 @@ die "$spec_file does not exist; use --spec-file\n" unless -e $spec_file;
 # Extract the version from the spec file.
 my $version = eval {
     # Just ignore failure, likely because rpmspec is not available.
-    capturex( 'rpmspec', '-q', '--qf', '%{version}', $spec_file );
+    capturex( 'rpmspec', '-q', '--srpm', '--qf', '%{version}', $spec_file );
 } || do {
     my $fh = $spec_file->open('<:encoding(UTF-8)')
         or die "Cannot open $spec_file: $!\n";
