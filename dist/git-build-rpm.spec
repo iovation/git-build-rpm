@@ -1,6 +1,6 @@
 Name:           git-build-rpm
 Summary:    	Build an RPM from a Git repository
-Version:    	1.3
+Version:    	1.4
 Release:    	1%{?dist}
 Group:          Development/Libraries
 License:    	Proprietary
@@ -56,6 +56,18 @@ find $RPM_BUILD_ROOT -depth -type d -exec rmdir {} 2>/dev/null \;
 %{gitbin}/*
 
 %changelog
+* Mon Sep 26 2016 - David E. Wheeler <david.wheeler@iovation.com> 1.4-1
+- Use `GIT_BRANCH` if available (e.g., under Jenkins).
+- Expand documentation.
+- Install Git and rpmbuild prereqs.
+- Replace invalid characters in Release tag.
+- Try to use the rpmspec command to get the version to ensure that any
+  relevant macros are first set. Fall back to the old behaviour if it fails,
+  since rpmspec is available only in rpm 4.9 and later.
+- Abort build if macros appear in the version fetched from the spec file.
+- Add dnf and pip pre-req install instructions.
+- Try harder to exclude detached branches when determining the branch name.
+
 * Thu May 7 2015 - David E. Wheeler <david.wheeler@iovation.com> 1.3-1
 - Restored OS name part to the %dist macro.
 
