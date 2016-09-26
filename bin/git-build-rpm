@@ -145,7 +145,7 @@ sub find_branch {
         # Return the branch unless it's detached.
         chomp $line;
         $line =~ s/^[*]\s//;
-        return $line unless $line eq '(no branch)';
+        return $line if $line !~ /\A[(]/; # (no branch), (HEAD detached at 1e50a72)
     }
 
     if (my $line = first { $_ !~ m{/} && $_ !~ /^[*]/ } @lines) {
