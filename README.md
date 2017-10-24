@@ -59,6 +59,7 @@ Options
 * `--git`: Path to git program.
 * `--git-branch`: Git branch to build from.
 * `-p` `--package-name`: Name of the project, used to archive the repo.
+* `-v` `--package-version`: Version of the package, used in the RPM release name.
 * `--dist`: Name of distribution, used in RPM release name.
 * `-D` `--define`:  Define macro=value.
 * `--rpm-dir`: Path to directory for building the RPM.
@@ -86,10 +87,11 @@ Here's what `git-build-rpm` does when you run it:
 *   Determines the path to the RPM spec file, via the `--spec-file` option
     or by looking for a file named `./dist/$package_name.spec`.
 
-*   Extracts the version from the spec file. It tries using `rpmspec`, but if
-    it's not available, it parses the version from the spec file directly. If
-    that extracted version appears to be a macro, it will be run through `rpm
-    -E` for evaluation.
+*   Unless specified via the `--pakcage-version` option, Extracts the version
+    from the spec file. It tries using `rpmspec`, but if it's not available,
+    it parses the version from the spec file directly. If that extracted
+    version appears to be a macro, it will be run through `rpm -E` for
+    evaluation.
 
 *   Copies the spec file to the RPM build directory.
 

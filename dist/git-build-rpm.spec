@@ -1,6 +1,6 @@
 Name:           git-build-rpm
 Summary:    	Build an RPM from a Git repository
-Version:    	1.4
+Version:    	1.5
 Release:    	1%{?dist}
 Group:          Development/Libraries
 License:    	Proprietary
@@ -56,6 +56,9 @@ find $RPM_BUILD_ROOT -depth -type d -exec rmdir {} 2>/dev/null \;
 %{gitbin}/*
 
 %changelog
+* Tue Oct 24 2017 David E. Wheeler <david.wheeler@iovation.com> 1.5-1
+- Add --package-version option.
+
 * Mon Sep 26 2016 - David E. Wheeler <david.wheeler@iovation.com> 1.4-1
 - Use `GIT_BRANCH` if available (e.g., under Jenkins).
 - Expand documentation.

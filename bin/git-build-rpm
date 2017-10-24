@@ -10,7 +10,7 @@ use File::Temp;
 use Path::Class;
 use File::Path qw(make_path);
 use File::Copy qw(move copy);
-our $VERSION = '1.4';
+our $VERSION = '1.5';
 
 Getopt::Long::Configure (qw(bundling));
 my %opts = ( git => 'git' );
@@ -18,6 +18,7 @@ Getopt::Long::GetOptions(
     'git=s'                 => \$opts{git},
     'spec-file|spec=s'      => \$opts{spec_file},
     'package-name|p=s'      => \$opts{package_name},
+    'package-version|v=s'   => \$opts{pkg_version},
     'dist|d=s'              => \$opts{dist},
     'git-branch|branch|b=s' => \$opts{git_branch},
     'rpm-dir|dir=s'         => \$opts{rpm_dir},
@@ -61,7 +62,7 @@ my $spec_file = file $opts{spec_file} || ('dist', "$name.spec");
 die "$spec_file does not exist; use --spec-file\n" unless -e $spec_file;
 
 # Extract the version from the spec file.
-my $version = eval {
+my $version = $opts{pkg_version} || eval {
     # Just ignore failure, likely because rpmspec is not available.
     capturex( 'rpmspec', '-q', '--srpm', '--qf', '%{version}', $spec_file );
 } || do {
