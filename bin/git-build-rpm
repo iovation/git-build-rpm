@@ -17,6 +17,7 @@ my %opts = ( git => 'git' );
 Getopt::Long::GetOptions(
     'git=s'                 => \$opts{git},
     'spec-file|spec=s'      => \$opts{spec_file},
+    'archive-ext|ext=s'    => \$opts{archive_ext},
     'package-name|p=s'      => \$opts{package_name},
     'package-version|v=s'   => \$opts{pkg_version},
     'dist|d=s'              => \$opts{dist},
@@ -58,6 +59,7 @@ my $name = $opts{package_name} || do {
 
 my $dir = dir $opts{rpm_dir} || File::Temp::tempdir(CLEANUP => 1);
 my $spec_file = file $opts{spec_file} || ('dist', "$name.spec");
+my $archive_ext = $opts{archive_ext} || "tar.gz";
 
 die "$spec_file does not exist; use --spec-file\n" unless -e $spec_file;
 
@@ -96,7 +98,7 @@ print "Archiving $name-$version\n" unless $opts{quiet};
 my $src_dir = $dir->subdir('SOURCES');
 make_path $src_dir->stringify;
 runx $git, 'archive-all', '--force-submodules', '--prefix', "$name-$version/",
-    $src_dir->file("$name-$version.tar.gz");
+    $src_dir->file("$name-$version.$archive_ext");
 
 # Determine dist tag, if any.
 my $dist = $opts{dist} || do {
@@ -191,6 +193,7 @@ for it.
 =head1 Options
 
      --spec-file    FILE        Path to RPM spec file.
+     --archive-ext  EXT         Supported Extensions tar tar.gz, tar.bz2, tar.xz, tgz, txz, zip
      --git          PATH        Path to git program.
      --git-branch   BRANCH      Git branch to build from.
  -p  --package-name PAKCKAGE    Name of the project, used to archive the repo.
@@ -215,6 +218,17 @@ for it.
 
 Path to the project spec file. If not specified, defaults to F<dist/$projname.spec>.
 where the project name is extracted from the origin remote URL.
+
+=item C<--ext>
+
+=item C<--archive-ext>
+
+  git build-rpm --ext tar.gz
+  git build-rpm --archive-ext tar.bz2
+
+Extension to determine the type of archive that will be created by git-archive-all.
+If not specified, defaults to tar.gz. Supported archive types are tar, tar.gz,
+tar.bz2, tar.xz, tgz, txz, and zip.
 
 =item C<--git>
 
