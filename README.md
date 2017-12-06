@@ -56,6 +56,7 @@ Options
 -------
 
 * `--spec-file`: Path to RPM spec file.
+* `--archive-ext`: Extension used for creating archive
 * `--git`: Path to git program.
 * `--git-branch`: Git branch to build from.
 * `-p` `--package-name`: Name of the project, used to archive the repo.
@@ -93,10 +94,11 @@ Here's what `git-build-rpm` does when you run it:
     version appears to be a macro, it will be run through `rpm -E` for
     evaluation.
 
-*   Copies the spec file to the RPM build directory.
+*   Copies the spec file to the RPM build SPECS directory.
 
 *   Archives the specified branch of the repository, as well as any
-    submodules, into the RPM build directory.
+    submodules, into the RPM build SOURCES directory using supplied --archive-ext
+    to determine archive type. Defaults to tar.gz.
 
 *   Determines the RPM `dist` value via the `--dist` option, defaulting to the
     current epoch time and OS version. If the current branch is not "master",
