@@ -7,9 +7,9 @@ Description
 -----------
 
 This project makes it easy to create RPMs from Git projects. Simply create an
-[RPM Spec file](http://www.rpm.org/max-rpm/p5208.html) with the same name as
-your Git repository in a directory named `dist` at the root of your project.
-This project is a good example: See
+[RPM Spec file](https://fedoraproject.org/wiki/How_to_create_an_RPM_package)
+with the same name as your Git repository in a directory named `dist` at the
+root of your project. This project is a good example: See
 [`dist/git-build-rpm.spec`](dist/git-build-rpm.spec) for an example. Then just
 run `git-build-rpm` to build your RPM:
 
