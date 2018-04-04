@@ -63,10 +63,26 @@ my $archive_ext = $opts{archive_ext} || "tar.gz";
 
 die "$spec_file does not exist; use --spec-file\n" unless -e $spec_file;
 
+# Determine dist tag, if any.
+my $dist = $opts{dist} || do {
+    (my $branch = $git_head) =~ s{.+/}{};
+    # Replace invalid characters.
+    # https://fedoraproject.org/wiki/Packaging:NamingGuidelines#CommonCharacterSet
+    $branch =~ s/[^a-zA-Z0-9._+]+/_/g; # Exclude -, not allowed in dist.
+    my $os = capturex(qw(rpm --eval %dist));
+    chomp $os;
+    time . ($branch eq 'master' ? '' : ".$branch") . $os;
+};
+
 # Extract the version from the spec file.
 my $version = $opts{pkg_version} || eval {
     # Just ignore failure, likely because rpmspec is not available.
-    capturex( 'rpmspec', '-q', '--srpm', '--qf', '%{version}', $spec_file );
+    capturex(
+        'rpmspec', '-q', '--srpm', '--qf', '%{version}',
+        ( $dist ? ('--define', "dist $dist") : ()),
+        ( map { ('--define', "$_ $opts{define}->{$_}") } keys %{ $opts{define} || {} }),
+        $spec_file
+    );
 } || do {
     my $fh = $spec_file->open('<:encoding(UTF-8)')
         or die "Cannot open $spec_file: $!\n";
@@ -99,17 +115,6 @@ my $src_dir = $dir->subdir('SOURCES');
 make_path $src_dir->stringify;
 runx $git, 'archive-all', '--force-submodules', '--prefix', "$name-$version/",
     $src_dir->file("$name-$version.$archive_ext");
-
-# Determine dist tag, if any.
-my $dist = $opts{dist} || do {
-    (my $branch = $git_head) =~ s{.+/}{};
-    # Replace invalid characters.
-    # https://fedoraproject.org/wiki/Packaging:NamingGuidelines#CommonCharacterSet
-    $branch =~ s/[^a-zA-Z0-9._+]+/_/g; # Exclude -, not allowed in dist.
-    my $os = capturex(qw(rpm --eval %dist));
-    chomp $os;
-    time . ($branch eq 'master' ? '' : ".$branch") . $os;
-};
 
 # Now build it!
 print "Creating RPM\n" unless $opts{quiet};
