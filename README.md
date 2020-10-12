@@ -31,8 +31,6 @@ Install dependencies via YUM:
                      'perl(IPC::System::Simple)' \
                      'perl(Path::Class)'
 
-
-
 Install dependencies via DNF and pip:
 
     sudo dnf install git rpm-build perl-rpm-build-perl perl-IPC-System-Simple \
@@ -55,19 +53,20 @@ Build and install an RPM:
 Options
 -------
 
-* `--spec-file`: Path to RPM spec file.
+* `--spec-file`: Path to RPM spec file
 * `--archive-ext`: Extension used for creating archive
-* `--git`: Path to git program.
-* `--git-branch`: Git branch to build from.
-* `-p` `--package-name`: Name of the project, used to archive the repo.
-* `-v` `--package-version`: Version of the package, used in the RPM release name.
-* `--dist`: Name of distribution, used in RPM release name.
-* `-D` `--define`:  Define macro=value.
-* `--rpm-dir`: Path to directory for building the RPM.
-* `--quiet`: Print as little as possible.
-* `-V` `--version`: Print the version number and exit.
-* `-H` `--help`: Print a usage statement and exit.
-* `-M` `--man`: Print the complete documentation and exit.
+* `--git`: Path to git program
+* `--git-branch`: Git branch to build from
+* `-r` `--release-branch`: Name of the release branch, "master" by default
+* `-p` `--package-name`: Name of the project, used to archive the repo
+* `-v` `--package-version`: Version of the package, used in the RPM release name
+* `--dist`: Name of distribution, used in RPM release name
+* `-D` `--define`:  Define macro=value
+* `--rpm-dir`: Path to directory for building the RPM
+* `--quiet`: Print as little as possible
+* `-V` `--version`: Print the version number and exit
+* `-H` `--help`: Print a usage statement and exit
+* `-M` `--man`: Print the complete documentation and exit
 
 How it Works
 ------------
@@ -88,7 +87,7 @@ Here's what `git-build-rpm` does when you run it:
 *   Determines the path to the RPM spec file, via the `--spec-file` option
     or by looking for a file named `./dist/$package_name.spec`.
 
-*   Unless specified via the `--pakcage-version` option, Extracts the version
+*   Unless specified via the `--package-version` option, Extracts the version
     from the spec file. It tries using `rpmspec`, but if it's not available,
     it parses the version from the spec file directly. If that extracted
     version appears to be a macro, it will be run through `rpm -E` for
@@ -101,10 +100,10 @@ Here's what `git-build-rpm` does when you run it:
     to determine archive type. Defaults to tar.gz.
 
 *   Determines the RPM `dist` value via the `--dist` option, defaulting to the
-    current epoch time and OS version. If the current branch is not "master",
+    current epoch time and OS version. If the current branch is not 
     the branch name is also included in the `dist` value (with any invalid
     characters replaced with underscores). That is, the value is something
-    like `1434755064.el7` when building master, and
+    like `1434755064.el7` when building the release branch, and
     `1434755064.$branch_name_.el7` when building from any other branch.
 
 *   Builds the RPM, setting `dist` and any other parameters passed via the
@@ -114,8 +113,8 @@ Here's what `git-build-rpm` does when you run it:
 
 Copyright & License
 -------------------
-Copyright 2012-1015 [iovation, Inc.](http://iovation.com/) Some Rights
-Reserved.
+Copyright 2012-2017 [iovation, Inc.](https://iovation.com/) and 2018-2020
+[TransUnion LLC](https://www.transunion.com/). Some Rights Reserved.
 
 This program is free software; you can redistribute it and/or modify it under
 the same terms as Perl itself.

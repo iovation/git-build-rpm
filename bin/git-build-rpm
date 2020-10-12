@@ -10,18 +10,19 @@ use File::Temp;
 use Path::Class;
 use File::Path qw(make_path);
 use File::Copy qw(move copy);
-our $VERSION = '1.5';
+our $VERSION = '1.6';
 
 Getopt::Long::Configure (qw(bundling));
-my %opts = ( git => 'git' );
+my %opts = ( git => 'git', release_branch => 'master' );
 Getopt::Long::GetOptions(
     'git=s'                 => \$opts{git},
     'spec-file|spec=s'      => \$opts{spec_file},
-    'archive-ext|ext=s'    => \$opts{archive_ext},
+    'archive-ext|ext=s'     => \$opts{archive_ext},
     'package-name|p=s'      => \$opts{package_name},
     'package-version|v=s'   => \$opts{pkg_version},
     'dist|d=s'              => \$opts{dist},
     'git-branch|branch|b=s' => \$opts{git_branch},
+    'release-branch|r=s'    => \$opts{release_branch},
     'rpm-dir|dir=s'         => \$opts{rpm_dir},
     'define|D=s%'           => \$opts{define},
     'help|H'                => \$opts{help},
@@ -71,7 +72,7 @@ my $dist = $opts{dist} || do {
     $branch =~ s/[^a-zA-Z0-9._+]+/_/g; # Exclude -, not allowed in dist.
     my $os = capturex(qw(rpm --eval %dist));
     chomp $os;
-    time . ($branch eq 'master' ? '' : ".$branch") . $os;
+    time . ($branch eq $opts{release_branch} ? '' : ".$branch") . $os;
 };
 
 # Extract the version from the spec file.
@@ -164,9 +165,9 @@ sub find_branch {
     }
 
     if (my @cands = grep { m{/} && $_ !~ /^[*]/ && $_ !~ /->/ } @lines) {
-        # It's in a remote branch. Prefer master.
-        my $line = first { m{origin/master$} } @cands;
-        $line ||=  first { m{/master$} } @cands;
+        # It's in a remote branch. Prefer the release branch.
+        my $line = first { m{origin/\Q$opts{release_branch}\E$} } @cands;
+        $line ||=  first { m{/\Q$opts{release_branch}\E$} } @cands;
         $line ||= $cands[0];
 
         # Keep only the last part of the name.
@@ -249,12 +250,26 @@ it default to finding it in your path.
 =item C<--git-branch>
 
   git build-rpm --git-branch develop
-  git build-rpm --branch master
+  git build-rpm --branch main
   git build-rpm -b staging
 
 Specifies the name of the Git branch (or any commit identifier, really) to use
 for the build. Defaults to the currently checked-out branch unless the
 checkout is detatched, in which case the value will be C<HEAD>.
+
+=item C<-r>
+
+=item C<--release-branch>
+
+  git build-rpm --release-branch main
+  git build-rpm -r trunk
+
+Specify the name of the release branch. When the branch being built is the
+release branch, the branch name will be omitted from the dist RPM file name
+(via the C<Dist> RPM variable). This will also be the branch name used when
+C<--git-branch> is not set and the current checkout is part of multiple
+branches. Traditionally the release branch was named "master", which is the
+default.
 
 =item C<-p>
 
@@ -270,7 +285,8 @@ name of the resulting RPM. Defaults to the name of the Git repository.
 Sets the C<Dist> RPM variable. This is most often appended to the Release
 number, if any. Defaults to the current timestamp, a dot, the branch name,
 another dot, then the usual RPM C<%dist> value, such as C<el7>. If the branch
-name is "master", the branch name will noe be included.
+name is the release branch (as specified by C<--release-branch>), the branch
+name will not be included.
 
 =item C<-D>
 
@@ -334,6 +350,7 @@ David E. Wheeler <david.wheeler@iovation.com>
 
 =head1 Copyright
 
-Copyright (c) 2012-2015 iovation, Inc. All rights reserved.
+Copyright 2012-2017 iovation, Inc. and 2018-2020 TrasUnion LLC.
+Some rights reserved.
 
 =cut

@@ -1,10 +1,10 @@
 Name:           git-build-rpm
-Summary:    	Build an RPM from a Git repository
-Version:    	1.5
-Release:    	1%{?dist}
+Summary:    	  Build an RPM from a Git repository
+Version:    	  1.6
+Release:    	  1%{?dist}
 Group:          Development/Libraries
-License:    	Proprietary
-Source0:    	%{name}-%{version}.tar.gz
+License:        GPL+ or Artistic
+Source0:    	  %{name}-%{version}.tar.gz
 BuildRoot:	    %{_tmppath}/%{name}-%{version}-%{release}-root
 BuildRequires:  git
 BuildRequires:  perl >= 1:v5.10.1
@@ -56,6 +56,11 @@ find $RPM_BUILD_ROOT -depth -type d -exec rmdir {} 2>/dev/null \;
 %{gitbin}/*
 
 %changelog
+* Mon Oct 12 2020 David E. Wheeler <david.wheeler@iovation.com> 1.6-1
+- Add --release-branch option.
+- Update license & copyright.
+- Add compilation test.
+
 * Tue Oct 24 2017 David E. Wheeler <david.wheeler@iovation.com> 1.5-1
 - Add --package-version option.
 
